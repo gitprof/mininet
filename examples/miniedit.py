@@ -2883,6 +2883,17 @@ class MiniEdit( Frame ):
                 linkopts=link['linkOpts']
                 srcName, dstName = src[ 'text' ], dst[ 'text' ]
                 srcNode, dstNode = net.nameToNode[ srcName ], net.nameToNode[ dstName ]
+
+                # bug fix: when linkopts contains keys names 'node1' or 'node2' we get multiple keys error when calling net.addLink()
+                for a in linkopts.keys():
+                    if a == 'node1':
+                        linkopts['_node1'] = linkopts['node1']
+                        del linkopts['node1']
+                    if a == 'node2':
+                        linkopts['_node2'] = linkopts['node2']
+                        del linkopts['node2']
+
+
                 if linkopts:
                     net.addLink(srcNode, dstNode, cls=TCLink, **linkopts)
                 else:
